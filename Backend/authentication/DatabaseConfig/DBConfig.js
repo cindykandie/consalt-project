@@ -1,6 +1,7 @@
 const mssql = require('mssql')
 const env = require('dotenv')
-env.config()
+const { options } = require('joi')
+env.config('../')
 
 const config = {
     user: process.env.USER_NAME,
@@ -11,6 +12,12 @@ const config = {
         max: 10,
         min: 0,
         idleTimeoutMillis: 3000
+    },
+    options:{
+        encrypt: false, 
+        trustServerCertificate: false
     }
 
 }
+
+module.exports = {config}
