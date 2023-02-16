@@ -2,6 +2,9 @@ const { serviceAddUser } = require("../Services/addUserService");
 const { serviceLogin } = require("../Services/loginService")
 const {joiSchemaAddUser,joiSchemaLogin} = require('../JoiConfig/JoiConfig');
 const e = require("express");
+const jwt  = require('jsonwebtoken')
+const env = require('dotenv')
+env.config('../')
 
 
 
@@ -15,7 +18,14 @@ const login = async (req,res)=>{
    
     let result = await serviceLogin({username,password});
     if (result.recordset.length === 1){
-        return res.status(200).json({message: "OK"});
+        let token = jwt.sign(
+            {
+                exp: Math.floor(Date.now() / 1000) + (60 * 60),
+                username,
+                password
+            },
+            process.env.SECRET_KEY,)
+        return res.status(200).json({token});
     }
     else {
         return res.status(401).json({message: "Invalid credentials"});
@@ -38,9 +48,7 @@ const addUser = async (req, res) => {
     } catch (error) {
         return res.status(500).json({error: error.message});
     }
-    
-    
-    
+        
 }
 
 

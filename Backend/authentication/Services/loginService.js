@@ -2,7 +2,7 @@ const {dbHelper, exec } = require("../dbHelper/databaseHelper");
 
 const serviceLogin = async(data)=>{
     
-    let result = dbHelper.exec("userLogin", data)
+    let result = await dbHelper.exec("userLogin", data)
     return result
 }
 
